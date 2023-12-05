@@ -3,9 +3,9 @@ import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Scroll
 import Icon from 'react-native-vector-icons/Ionicons';
 import SystemMessageContainer from './components/SystemMessageContainer/SystemMessageContainer';
 import UserMessageContainer from './components/UserMessageContainer/UserMessageContainer';
+const {height, width} = Dimensions.get('screen')
 
 const MainScreen = ({navigation}) => {
-    const {height, width} = Dimensions.get('screen')
     const [userMessage, setUserMessage] = useState('')
     const [userDisplayMessage, setUserDisplayMessage] = useState('')
     const [messages, setMessages] = useState([])
@@ -25,12 +25,12 @@ const MainScreen = ({navigation}) => {
     return(
 
         <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: '#F3EEEA' }}
+        style={styles.container}
       >
 
-        <View style={{backgroundColor: '#F3EEEA', alignItems: 'center', justifyContent: 'space-between', width: width, height: height * 0.07, borderBottomWidth: 0.5, borderBottomColor: 'B0A695', flexDirection: 'row'}}>
-            <Text style={{color: '#113946', fontSize: 18, marginLeft: width * 0.03, fontWeight: '600'}}>MyPsychologist</Text>
-            <TouchableOpacity onPress={goAllMessagesScreen} style={{marginRight: width * 0.02, height: height * 0.057, width: height * 0.057, borderRadius: height * 0.03, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.header_container}>
+            <Text style={styles.header_text}>MyPsychologist</Text>
+            <TouchableOpacity onPress={goAllMessagesScreen} style={styles.all_message_button}>
                 <Icon name="reader" size={30} color={"#113946"}></Icon>
             </TouchableOpacity>
         </View>
@@ -50,22 +50,11 @@ const MainScreen = ({navigation}) => {
             </View>
             </ScrollView>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: width, marginVertical: height * 0.01, }}>
+            <View style={styles.input_container}>
                 <ScrollView>
                 <TextInput
                     multiline
-                    style={{
-                        borderWidth: 1,
-                        borderColor: '#B0A695',
-                        fontSize: 16,
-                        maxHeight: height * 0.115,
-                        backgroundColor: '#EBE3D5',
-                        marginLeft: width * 0.02,
-                        marginRight: width * 0.02,
-                        borderRadius: 20,
-                        paddingLeft: width * 0.03,
-                        paddingBottom: 2
-                    }}
+                    style={styles.input}
                     placeholder="How do you feel..."
                     placeholderTextColor="gray"
                     textAlignVertical="top"
@@ -74,7 +63,7 @@ const MainScreen = ({navigation}) => {
                 />
                 </ScrollView>
 
-                <TouchableOpacity onPress={sendMessage} style={{marginRight: width * 0.02, backgroundColor: '#6C584C', height: height * 0.057, width: height * 0.057, borderRadius: height * 0.03, alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableOpacity onPress={sendMessage} style={styles.send_button}>
                     <Icon name="send" size={23} color={"white"}></Icon>
                 </TouchableOpacity>
 
@@ -86,3 +75,71 @@ const MainScreen = ({navigation}) => {
 }
 
 export default MainScreen
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: '#F3EEEA',
+
+    },
+    header_container: {
+        backgroundColor: '#F3EEEA', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        width: width, 
+        height: height * 0.07, 
+        borderBottomWidth: 0.5, 
+        borderBottomColor: 'B0A695', 
+        flexDirection: 'row',
+
+    },
+    header_text: {
+        color: '#113946', 
+        fontSize: 18, 
+        marginLeft: width * 0.03, 
+        fontWeight: '600',
+
+    },
+    all_message_button: {
+        marginRight: width * 0.02, 
+        height: height * 0.057, 
+        width: height * 0.057, 
+        borderRadius: height * 0.03, 
+        alignItems: 'center', 
+        justifyContent: 'center',
+
+    },
+    input_container: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        width: width, 
+        marginVertical: height * 0.01, 
+
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#B0A695',
+        fontSize: 16,
+        maxHeight: height * 0.115,
+        backgroundColor: '#EBE3D5',
+        marginLeft: width * 0.02,
+        marginRight: width * 0.02,
+        borderRadius: 20,
+        paddingLeft: width * 0.03,
+        paddingBottom: 2,
+
+    },
+    send_button: {
+        marginRight: width * 0.02, 
+        backgroundColor: '#6C584C', 
+        height: height * 0.057, 
+        width: height * 0.057, 
+        borderRadius: height * 0.03, 
+        alignItems: 'center', 
+        justifyContent: 'center',
+
+    }
+
+})
