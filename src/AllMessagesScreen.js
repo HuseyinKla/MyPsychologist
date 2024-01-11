@@ -13,8 +13,8 @@ const AllMessagesScreen = ({navigation, route}) => {
         if(item){
             return(
                 <>
-                <UserMessageContainer message={item}/>
-                <SystemMessageContainer message={item + item + item}/>
+                <UserMessageContainer message={item.userMsg}/>
+                <SystemMessageContainer message={item.sysMsg}/>
                 </>
             )
         }
@@ -31,7 +31,7 @@ const AllMessagesScreen = ({navigation, route}) => {
                 <Text style={styles.header_text}>History</Text>
             </View>
 
-            <FlatList data={route.params.messages} renderItem={renderMessages}/>
+            <FlatList data={route.params.allMessages} renderItem={renderMessages}/>
 
 
         </View>

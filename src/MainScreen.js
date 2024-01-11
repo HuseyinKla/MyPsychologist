@@ -1,25 +1,69 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView,} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import SystemMessageContainer from './components/SystemMessageContainer/SystemMessageContainer';
 import UserMessageContainer from './components/UserMessageContainer/UserMessageContainer';
+import axios from 'axios';
+
+
+
 const {height, width} = Dimensions.get('screen')
+
+
+
 
 const MainScreen = ({navigation}) => {
     const [userMessage, setUserMessage] = useState('')
     const [userDisplayMessage, setUserDisplayMessage] = useState('')
-    const [messages, setMessages] = useState([])
+    const [allMessages, setAllMessages] = useState([])
+    const [employees, setEmployees] = useState()
+    const [postBilgi, setPostBilgi] = useState()
 
-    const sendMessage = () => {
-        if(userMessage){
-            setUserDisplayMessage(userMessage)
-            setMessages([...messages, userMessage])
-            setUserMessage('')
-        }
-    }
 
     const goAllMessagesScreen = () => {
-        navigation.navigate('AllMessagesScreen', {messages})
+        navigation.navigate('AllMessagesScreen', {allMessages})
+    }
+
+    const getEmployees = async () => {
+        try {
+          const response = await axios.get('http://192.168.1.15:5000/employees');
+          setEmployees(response.data)
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const postDeneme = async (msg) => {
+        if(userMessage){
+            try {
+            const response = await axios.post('http://192.168.1.15:5000/systemAnswer', {messageContent: msg},
+            {
+                headers: axios.defaults.headers['Content-Type'] = 'application/json'
+            });
+            systemAnswer = JSON.stringify(response.data.systemMessage).replaceAll('"','')
+            setPostBilgi(systemAnswer)
+            } catch (error) {
+            console.error(error);
+            }
+            setUserDisplayMessage(userMessage)
+            setAllMessages([...allMessages, {userMsg: userMessage, sysMsg: systemAnswer}])
+            setUserMessage('')
+        }
+      };
+
+      const fetchDataPost =  async () => {
+        try {
+            const responseData = await axios.post(url, postData,
+                {
+                    headers: axios.defaults.headers['Content-Type'] = 'multipart/form-data'
+                })
+                setData(responseData.data)
+                setLoading(false)
+                console.log("post işlem sonucu: ",responseData.status)
+        } catch (error) {
+            setLoading(false)
+            setError(error)
+        }
     }
 
     return(
@@ -42,7 +86,7 @@ const MainScreen = ({navigation}) => {
             <View style={{flex: 1, backgroundColor: '#F3EEEA'}}>
                 {userDisplayMessage ? <>
                     <UserMessageContainer message={userDisplayMessage}/>
-                    <SystemMessageContainer message={userDisplayMessage + userDisplayMessage + userDisplayMessage}/>
+                    <SystemMessageContainer message={postBilgi}/>
                 </> 
                 :<SystemMessageContainer message={'How was your day?'}/>
             }
@@ -63,7 +107,7 @@ const MainScreen = ({navigation}) => {
                 />
                 </ScrollView>
 
-                <TouchableOpacity onPress={sendMessage} style={styles.send_button}>
+                <TouchableOpacity onPress={()=> postDeneme(userMessage)} style={styles.send_button}>
                     <Icon name="send" size={23} color={"white"}></Icon>
                 </TouchableOpacity>
 
