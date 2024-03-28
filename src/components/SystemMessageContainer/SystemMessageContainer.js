@@ -10,7 +10,7 @@ const SystemMessageContainer = ({message}) => {
             backgroundColor: '#EBE3D5', 
             borderColor: '#B0A695', 
             borderWidth: 1,
-            marginTop: height * 0.02, 
+            marginTop: height * 0.01, 
             marginBottom: height * 0.01, 
             maxWidth: width * 0.75,
             paddingHorizontal: width * 0.03,

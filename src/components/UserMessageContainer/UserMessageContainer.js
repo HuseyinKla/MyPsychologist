@@ -12,7 +12,7 @@ const UserMessageContainer = ({message}) => {
                 borderColor: '#B0A695', 
                 borderWidth: 1,
                 marginTop: height * 0.02, 
-                marginBottom: height * 0.01, 
+                marginBottom: height * 0.02, 
                 maxWidth: width * 0.75,
                 paddingHorizontal: width * 0.03,
                 paddingVertical: height * 0.02,

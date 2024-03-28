@@ -18,6 +18,7 @@ const MainScreen = ({navigation}) => {
     const [allMessages, setAllMessages] = useState([])
     const [employees, setEmployees] = useState()
     const [postBilgi, setPostBilgi] = useState()
+    const [systemQuestion, setSystemQuestion] = useState()
 
 
     const goAllMessagesScreen = () => {
@@ -33,7 +34,7 @@ const MainScreen = ({navigation}) => {
         }
       };
 
-      const postDeneme = async (msg) => {
+      const postSystemAnswer = async (msg) => {
         if(userMessage){
             try {
             const response = await axios.post('http://192.168.1.15:5000/systemAnswer', {messageContent: msg},
@@ -41,30 +42,17 @@ const MainScreen = ({navigation}) => {
                 headers: axios.defaults.headers['Content-Type'] = 'application/json'
             });
             systemAnswer = JSON.stringify(response.data.systemMessage).replaceAll('"','')
+            sysQstn = JSON.stringify(response.data.systemQuestion).replaceAll('"','')
             setPostBilgi(systemAnswer)
+            setSystemQuestion(sysQstn)
             } catch (error) {
             console.error(error);
             }
             setUserDisplayMessage(userMessage)
-            setAllMessages([...allMessages, {userMsg: userMessage, sysMsg: systemAnswer}])
+            setAllMessages([...allMessages, {userMsg: userMessage, sysMsg: systemAnswer, sysQtn: sysQstn}])
             setUserMessage('')
         }
       };
-
-      const fetchDataPost =  async () => {
-        try {
-            const responseData = await axios.post(url, postData,
-                {
-                    headers: axios.defaults.headers['Content-Type'] = 'multipart/form-data'
-                })
-                setData(responseData.data)
-                setLoading(false)
-                console.log("post işlem sonucu: ",responseData.status)
-        } catch (error) {
-            setLoading(false)
-            setError(error)
-        }
-    }
 
     return(
 
@@ -84,9 +72,15 @@ const MainScreen = ({navigation}) => {
 
             <ScrollView>
             <View style={{flex: 1, backgroundColor: '#F3EEEA'}}>
-                {userDisplayMessage ? <>
+                {userDisplayMessage ? 
+                <>
                     <UserMessageContainer message={userDisplayMessage}/>
                     <SystemMessageContainer message={postBilgi}/>
+                    {
+                        sysQstn ?
+                            <SystemMessageContainer message={systemQuestion}/>
+                        : null
+                    }
                 </> 
                 :<SystemMessageContainer message={'How was your day?'}/>
             }
@@ -107,7 +101,7 @@ const MainScreen = ({navigation}) => {
                 />
                 </ScrollView>
 
-                <TouchableOpacity onPress={()=> postDeneme(userMessage)} style={styles.send_button}>
+                <TouchableOpacity onPress={()=> postSystemAnswer(userMessage)} style={styles.send_button}>
                     <Icon name="send" size={23} color={"white"}></Icon>
                 </TouchableOpacity>
 

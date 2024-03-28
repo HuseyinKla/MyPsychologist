@@ -15,6 +15,7 @@ const AllMessagesScreen = ({navigation, route}) => {
                 <>
                 <UserMessageContainer message={item.userMsg}/>
                 <SystemMessageContainer message={item.sysMsg}/>
+                <SystemMessageContainer message={item.sysQtn}/>
                 </>
             )
         }
