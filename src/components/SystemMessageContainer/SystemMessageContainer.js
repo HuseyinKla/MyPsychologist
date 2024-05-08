@@ -3,7 +3,7 @@ import { Dimensions, Text, View } from 'react-native'
 
 
 
-const SystemMessageContainer = ({message}) => {
+const SystemMessageContainer = ({message, tag}) => {
     const {height, width} = Dimensions.get('screen')
     return(
         <View style={{
@@ -22,7 +22,8 @@ const SystemMessageContainer = ({message}) => {
             >
 
                 <Text style={{color: 'black', fontSize: 14}}>{message}</Text>
-            </View>
+                <Text style={{color: '#113946', fontSize: 14, fontWeight: 'bold'}}>Tag: #{tag}</Text>
+        </View>
     )
 }
 

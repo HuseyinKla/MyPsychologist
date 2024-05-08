@@ -14,8 +14,8 @@ const AllMessagesScreen = ({navigation, route}) => {
             return(
                 <>
                 <UserMessageContainer message={item.userMsg}/>
-                <SystemMessageContainer message={item.sysMsg}/>
-                <SystemMessageContainer message={item.sysQtn}/>
+                <SystemMessageContainer message={item.sysMsg} tag={item.sysTag}/>
+                <SystemMessageContainer message={item.sysQstn} tag={item.sysTag}/>
                 </>
             )
         }

@@ -19,6 +19,7 @@ const MainScreen = ({navigation}) => {
     const [employees, setEmployees] = useState()
     const [postBilgi, setPostBilgi] = useState()
     const [systemQuestion, setSystemQuestion] = useState()
+    const [systemTag, setSystemTag] = useState("Empty")
 
 
     const goAllMessagesScreen = () => {
@@ -27,7 +28,7 @@ const MainScreen = ({navigation}) => {
 
     const getEmployees = async () => {
         try {
-          const response = await axios.get('http://192.168.1.15:5000/employees');
+          const response = await axios.get('http://192.168.0.17:5000/employees');
           setEmployees(response.data)
         } catch (error) {
           console.error(error);
@@ -37,19 +38,21 @@ const MainScreen = ({navigation}) => {
       const postSystemAnswer = async (msg) => {
         if(userMessage){
             try {
-            const response = await axios.post('http://192.168.1.15:5000/systemAnswer', {messageContent: msg},
+            const response = await axios.post('http://192.168.0.17:5000/systemAnswer', {messageContent: msg},
             {
                 headers: axios.defaults.headers['Content-Type'] = 'application/json'
             });
             systemAnswer = JSON.stringify(response.data.systemMessage).replaceAll('"','')
             sysQstn = JSON.stringify(response.data.systemQuestion).replaceAll('"','')
+            tag = JSON.stringify(response.data.systemTag).replaceAll('"','')
             setPostBilgi(systemAnswer)
             setSystemQuestion(sysQstn)
+            setSystemTag(tag)
             } catch (error) {
             console.error(error);
             }
             setUserDisplayMessage(userMessage)
-            setAllMessages([...allMessages, {userMsg: userMessage, sysMsg: systemAnswer, sysQtn: sysQstn}])
+            setAllMessages([...allMessages, {userMsg: userMessage, sysMsg: systemAnswer, sysQstn: sysQstn, sysTag: tag}])
             setUserMessage('')
         }
       };
@@ -75,14 +78,14 @@ const MainScreen = ({navigation}) => {
                 {userDisplayMessage ? 
                 <>
                     <UserMessageContainer message={userDisplayMessage}/>
-                    <SystemMessageContainer message={postBilgi}/>
+                    <SystemMessageContainer message={postBilgi} tag={systemTag}/>
                     {
                         sysQstn ?
-                            <SystemMessageContainer message={systemQuestion}/>
+                            <SystemMessageContainer message={systemQuestion} tag={systemTag}/>
                         : null
                     }
                 </> 
-                :<SystemMessageContainer message={'How was your day?'}/>
+                :<SystemMessageContainer message={'How was your day?'} tag={systemTag}/>
             }
 
             </View>
